@@ -20,7 +20,7 @@ plugin only where Neovim hits a real limit. Leader is `Space`.
 | `lua/plugins/format.lua` | conform.nvim: format on save where the project opts in |
 | `lua/plugins/snacks.lua` | Picker and word references |
 | `lua/plugins/oil.lua` | Folders as editable buffers |
-| `lua/rex.lua` | Run commands in a Rex pane, errors back to quickfix |
+| `lua/rex/` | Run tasks/commands in a Rex pane, errors back to quickfix (`init` keys, `pane`, `run`, `tasks`) |
 | `lua/statusline.lua` | Hand-written statusline |
 | `after/ftplugin/` | Per-language settings (indent, wrapping) |
 | `after/lsp/` | Per-server overrides on top of nvim-lspconfig |
@@ -56,15 +56,28 @@ Built-in keys still work; this lists what's added or changed.
 
 **Rex** (only when nvim runs inside Rex)
 
+Commands run in the pane labeled `run`; if there isn't one, it's created
+below nvim. Errors land in the quickfix list (`]q` / `[q`), the full output in
+a log buffer.
+
 | Key | Action |
 | --- | --- |
-| `<leader>rc` | Run a command in the Rex pane (asks which pane once) |
-| `<leader>rr` | Re-run the last command |
-| `<leader>rw` | Toggle re-run on save |
-| `<leader>rq` / `rl` | Reload results / open the full output log |
-| `<leader>rp` | Choose a different pane |
+| `<leader>rt` / `rb` / `rl` | Run the project's test / build / lint task |
+| `<leader>ra` | Pick a task (or edit this project's tasks) |
+| `<leader>rr` | Re-run the last task or command (remembered per project) |
+| `<leader>rc` | Run any command |
+| `<leader>rh` | Pick from this project's history |
+| `<leader>rx` | Interrupt (Ctrl-C) |
+| `<leader>rw` | Toggle re-run on save (project files only; restarts a run in progress) |
+| `<leader>rq` / `ro` | Reload results / open the output log |
+| `<leader>rv` | Hide the pane in a background tab / bring it back |
+| `<leader>rk` | Close the pane |
+| `<leader>rp` | Use a different pane for this session |
 
-Errors land in the quickfix list: `]q` / `[q` to walk them.
+Tasks: Rust, Go, Python and Node projects get built-in test/build/lint tasks.
+`:RexTasks` opens this project's private task file (kept in nvim's data
+folder, not the repo) to add tasks, change commands, or give tasks their own
+`<leader>r` key.
 
 ## Plugins
 
