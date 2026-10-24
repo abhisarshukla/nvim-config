@@ -29,7 +29,6 @@ map('n', '<leader>sg', function() picker.grep() end, { desc = 'Grep project' })
 map({ 'n', 'x' }, '<leader>sw', function() picker.grep_word() end, { desc = 'Grep word / selection' })
 map('n', '<leader>sd', function() picker.diagnostics() end, { desc = 'Search diagnostics' })
 map('n', '<leader>sh', function() picker.help() end, { desc = 'Search help' })
-map('n', '<leader>sk', function() picker.keymaps() end, { desc = 'Search keymaps' })
 map('n', '<leader>sr', function() picker.resume() end, { desc = 'Resume last search' })
 
 -- Jump between uses of the symbol under the cursor (]] [[ are taken by classes).

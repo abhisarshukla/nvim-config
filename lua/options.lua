@@ -23,6 +23,13 @@ o.expandtab = true
 o.shiftwidth = 4
 o.tabstop = 4
 
+-- Neovim's Python, Rust and Go ftplugins map ]] [[ ]m [m per buffer, which
+-- hides the treesitter jumps. Turn those off per language (g:no_plugin_maps
+-- would also remove matchit's %).
+vim.g.no_python_maps = 1
+vim.g.no_rust_maps = 1
+vim.g.no_go_maps = 1
+
 -- Search ignores case unless the pattern has a capital letter.
 o.ignorecase = true
 o.smartcase = true

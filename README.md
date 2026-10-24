@@ -24,6 +24,7 @@ plugin only where Neovim hits a real limit. Leader is `Space`.
 | `lua/plugins/git.lua` | gitsigns: change signs, hunks, blame, diffs |
 | `lua/rex/` | Run tasks/commands in a Rex pane, errors back to quickfix (`init` keys, `pane`, `run`, `tasks`) |
 | `lua/statusline.lua` | Hand-written statusline |
+| `lua/keyhelp.lua` | Key lookup: searchable key table, plain-English questions |
 | `lua/tools.lua` | Helpers for ftplugins: install missing mason tools / parsers once |
 | `ftplugin/<ft>.lua` | Per-language setup: server, parser, tools, formatter (runs when that filetype opens) |
 | `lua/lang/typescript.lua` | Setup shared by the four JS/TS filetypes |
@@ -36,13 +37,21 @@ plugin only where Neovim hits a real limit. Leader is `Space`.
 
 Built-in keys still work; this lists what's added or changed.
 
+**Forgot a key?**
+
+| Key | Action |
+| --- | --- |
+| `<leader>sk` | Table of every key — yours, plugins', Vim's built-ins. Search by key or description (`blame`, `center`, `split window`); preview shows where it's defined; `<CR>` runs it |
+| `<leader>?` | Ask in plain English ("how do I see who changed this line?"). Claude (`claude -p`, Haiku, no tools) answers from the keys in that table |
+| pause after `<leader>`, `g`, `[`, `]`, `z`, `<C-w>` | Popup of what comes next |
+
 **Files and search**
 
 | Key | Action |
 | --- | --- |
 | `<leader>ff` / `fb` / `fr` | Find files / open buffers / recent files |
 | `<leader>sg` / `sw` | Grep project / grep word or selection |
-| `<leader>sd` / `sh` / `sk` | Search diagnostics / help / keymaps |
+| `<leader>sd` / `sh` | Search diagnostics / help |
 | `<leader>sr` | Resume last search |
 | `-` | Open current file's folder in oil (edit, then `:w`) |
 

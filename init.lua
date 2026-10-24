@@ -24,3 +24,6 @@ require('rex')
 
 -- Hand-written statusline (shows Rex state, so it comes after rex).
 require('statusline')
+
+-- Key lookup: <leader>sk table, <leader>? ask in plain English.
+require('keyhelp')
