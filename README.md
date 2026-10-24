@@ -16,6 +16,7 @@ plugin only where Neovim hits a real limit. Leader is `Space`.
 | `lua/plugins/mason.lua` | Installs language servers and formatters |
 | `lua/plugins/treesitter.lua` | Parsers, code text objects, sticky context line |
 | `lua/plugins/lsp.lua` | Language servers, diagnostics, inlay hints |
+| `lua/plugins/fidget.lua` | LSP progress in the corner |
 | `lua/plugins/completion.lua` | blink.cmp + snippets |
 | `lua/plugins/format.lua` | conform.nvim: format on save where the project opts in |
 | `lua/plugins/snacks.lua` | Picker and word references |

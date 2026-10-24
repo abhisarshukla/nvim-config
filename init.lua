@@ -12,6 +12,7 @@ require('plugins.ui') -- first: colorscheme before other plugins set highlights
 require('plugins.mason') -- before LSP: puts tool binaries on PATH
 require('plugins.treesitter')
 require('plugins.lsp')
+require('plugins.fidget')
 require('plugins.completion')
 require('plugins.format')
 require('plugins.snacks')
