@@ -1,6 +1,7 @@
 -- Language servers. Neovim has the LSP client built in; nvim-lspconfig only
 -- supplies ready-made server configs (its lsp/*.lua files). Your per-server
 -- overrides live in after/lsp/<name>.lua. Binaries come from mason.
+-- Each server is enabled by its language's ftplugin/<ft>.lua.
 --
 -- Keys (results open in the snacks picker, set below): gd definition,
 -- grr references, gri implementations, grt type definition, gO symbols.
@@ -10,15 +11,6 @@ local gh = require('pack').gh
 
 vim.pack.add({
   { src = gh('neovim/nvim-lspconfig'), version = vim.version.range('2.*') },
-})
-
-vim.lsp.enable({
-  'lua_ls',
-  'ty', -- Python types, hover, go-to
-  'ruff', -- Python lint + fixes
-  'vtsls', -- TypeScript / JavaScript
-  'gopls',
-  'rust_analyzer',
 })
 
 -- Per-buffer setup when a server attaches.

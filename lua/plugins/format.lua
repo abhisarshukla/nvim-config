@@ -1,5 +1,7 @@
 -- Format on save, but only where the project opts in with formatter config.
 -- Go and Rust always format: gofmt/rustfmt style is universal in those languages.
+-- Which formatter a filetype uses is set in its ftplugin/<ft>.lua; this file
+-- says when each formatter is allowed to run.
 local gh = require('pack').gh
 
 vim.pack.add({
@@ -18,26 +20,8 @@ local function project_uses_ruff(_, ctx)
   return vim.iter(vim.fn.readfile(pyproject)):any(function(l) return l:match('^%[tool%.ruff') ~= nil end)
 end
 
--- JS/TS-family files: Biome if configured, else Prettier if configured.
-local web = { 'biome', 'prettier', stop_after_first = true }
-
 require('conform').setup({
-  formatters_by_ft = {
-    lua = { 'stylua' },
-    python = { 'ruff_format' },
-    go = { 'goimports' }, -- gofmt + adds/removes imports
-    rust = { 'rustfmt' },
-    javascript = web,
-    javascriptreact = web,
-    typescript = web,
-    typescriptreact = web,
-    json = web,
-    jsonc = web,
-    css = web,
-    html = { 'prettier' },
-    yaml = { 'prettier' },
-    markdown = { 'prettier' },
-  },
+  formatters_by_ft = {}, -- filled in by ftplugin/<ft>.lua
   formatters = {
     stylua = { condition = project_has({ 'stylua.toml', '.stylua.toml' }) },
     ruff_format = { condition = project_uses_ruff },

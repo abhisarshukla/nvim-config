@@ -8,17 +8,10 @@ vim.pack.add({
   { src = gh('nvim-treesitter/nvim-treesitter-context'), version = vim.version.range('1.*') },
 })
 
--- Parsers to keep installed. Runs in the background; no-op once installed.
+-- Parsers for Neovim's own languages (kept in sync with nvim-treesitter's
+-- queries). Each language's parser is installed by its ftplugin/<ft>.lua.
 -- :TSUpdate after plugin updates is handled by the hook in lua/pack.lua.
--- stylua: ignore
-require('nvim-treesitter').install({
-  -- Neovim's own (kept in sync with nvim-treesitter's queries)
-  'lua', 'vim', 'vimdoc', 'query', 'markdown', 'markdown_inline',
-  -- Your languages
-  'python', 'javascript', 'typescript', 'tsx', 'go', 'gomod', 'gosum', 'rust',
-  -- Files around them
-  'json', 'yaml', 'toml', 'bash', 'html', 'css',
-})
+require('tools').parsers({ 'lua', 'vim', 'vimdoc', 'query', 'markdown', 'markdown_inline' })
 
 -- Turn treesitter on for any buffer whose language has a parser.
 vim.api.nvim_create_autocmd('FileType', {

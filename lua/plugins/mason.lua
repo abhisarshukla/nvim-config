@@ -8,21 +8,6 @@ vim.pack.add({
 
 require('mason').setup()
 
--- Tools to always have. Missing ones install in the background at startup.
--- (prettier and biome are not here: they come from each project's node_modules.)
--- stylua: ignore
-local tools = {
-  'lua-language-server', 'stylua',
-  'ty', 'ruff',
-  'vtsls',
-  'gopls', 'goimports',
-  'rust-analyzer', -- rustfmt comes from rustup
-}
-
-local registry = require('mason-registry')
-registry.refresh(function()
-  for _, name in ipairs(tools) do
-    local pkg = registry.get_package(name)
-    if not pkg:is_installed() then pkg:install() end
-  end
-end)
+-- Each language's tools are installed on demand by its ftplugin/<ft>.lua
+-- (via require('tools').ensure). prettier and biome come from each project's
+-- node_modules instead.

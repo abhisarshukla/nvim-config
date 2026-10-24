@@ -13,17 +13,20 @@ plugin only where Neovim hits a real limit. Leader is `Space`.
 | `lua/keymaps.lua` | General mappings |
 | `lua/pack.lua` | Plugin hooks, `:PackUpdate` / `:PackClean` / `:PackCheck`, daily update check |
 | `lua/plugins/ui.lua` | tokyonight, mini.icons, mini.clue (key hints) |
-| `lua/plugins/mason.lua` | Installs language servers and formatters |
-| `lua/plugins/treesitter.lua` | Parsers, code text objects, sticky context line |
-| `lua/plugins/lsp.lua` | Language servers, diagnostics, inlay hints |
+| `lua/plugins/mason.lua` | mason (installs language servers and formatters on demand) |
+| `lua/plugins/treesitter.lua` | Highlighting/folds on, code text objects, sticky context line |
+| `lua/plugins/lsp.lua` | LSP keys, diagnostics, inlay hints |
 | `lua/plugins/fidget.lua` | LSP progress in the corner |
 | `lua/plugins/completion.lua` | blink.cmp + snippets |
-| `lua/plugins/format.lua` | conform.nvim: format on save where the project opts in |
+| `lua/plugins/format.lua` | conform.nvim: when each formatter may run (project opt-in) |
 | `lua/plugins/snacks.lua` | Picker and word references |
 | `lua/plugins/oil.lua` | Folders as editable buffers |
 | `lua/rex/` | Run tasks/commands in a Rex pane, errors back to quickfix (`init` keys, `pane`, `run`, `tasks`) |
 | `lua/statusline.lua` | Hand-written statusline |
-| `after/ftplugin/` | Per-language settings (indent, wrapping) |
+| `lua/tools.lua` | Helpers for ftplugins: install missing mason tools / parsers once |
+| `ftplugin/<ft>.lua` | Per-language setup: server, parser, tools, formatter (runs when that filetype opens) |
+| `lua/lang/typescript.lua` | Setup shared by the four JS/TS filetypes |
+| `after/ftplugin/<ft>.lua` | Per-language option overrides (indent, wrapping) |
 | `after/lsp/` | Per-server overrides on top of nvim-lspconfig |
 | `snippets/` | Your own snippets (VS Code JSON format) |
 | `nvim-pack-lock.json` | Exact plugin versions — commit it |
@@ -94,16 +97,35 @@ folder, not the repo) to add tasks, change commands, or give tasks their own
 
 ## Languages
 
+Each language is set up by Neovim's own ftplugin loading: opening a Rust file
+sources `ftplugin/rust.lua`, which enables the server, installs the parser and
+mason tools if missing (they switch on as soon as they're ready), and picks
+the formatter. Option overrides go in `after/ftplugin/<ft>.lua`, server
+settings in `after/lsp/<server>.lua`.
+
 | Language | Server | Formatter (on save) |
 | --- | --- | --- |
 | Python | ty + ruff | ruff, if `ruff.toml` or `[tool.ruff]` exists |
 | TypeScript / JS | vtsls | Biome or Prettier, if configured in the project |
-| Go | gopls | goimports, always |
+| Go | gopls | goimports, always (tabs while typing) |
 | Rust | rust-analyzer | rustfmt, always |
 | Lua | lua_ls | stylua, if `stylua.toml` exists |
+| JSON, CSS | — | Biome or Prettier, if configured |
+| HTML, YAML, Markdown | — | Prettier, if configured |
+| TOML, shell | — | — |
 
-Tools come from mason (`:Mason`); add one to the list in
-`lua/plugins/mason.lua`. Parsers are listed in `lua/plugins/treesitter.lua`.
+**Add a language:** create `ftplugin/<filetype>.lua` (`:set ft?` shows the
+name) with any of:
+
+```lua
+vim.lsp.enable('server_name')                       -- name from nvim-lspconfig
+require('tools').ensure({ 'mason-package' })       -- :Mason lists packages
+require('tools').parsers({ 'parser' })
+require('conform').formatters_by_ft.<ft> = { 'formatter' }
+```
+
+If a formatter should only run when the project opts in, add its condition in
+`lua/plugins/format.lua`.
 
 System requirements: `git`, `tree-sitter` (brew `tree-sitter-cli`), `rg`, `fd`,
 a C compiler, `go` and `cargo` (for gopls/rustfmt), and a Nerd Font.
