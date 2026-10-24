@@ -37,6 +37,7 @@ clue.setup({
   clues = {
     -- Names for your <leader> groups
     { mode = 'n', keys = '<Leader>f', desc = '+find' },
+    { mode = 'n', keys = '<Leader>g', desc = '+git' },
     { mode = 'n', keys = '<Leader>s', desc = '+search' },
     { mode = 'n', keys = '<Leader>r', desc = '+rex' },
     { mode = 'n', keys = '<Leader>t', desc = '+toggle' },

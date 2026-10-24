@@ -19,8 +19,9 @@ plugin only where Neovim hits a real limit. Leader is `Space`.
 | `lua/plugins/fidget.lua` | LSP progress in the corner |
 | `lua/plugins/completion.lua` | blink.cmp + snippets |
 | `lua/plugins/format.lua` | conform.nvim: when each formatter may run (project opt-in) |
-| `lua/plugins/snacks.lua` | Picker and word references |
+| `lua/plugins/snacks.lua` | Picker, word references, statuscolumn |
 | `lua/plugins/oil.lua` | Folders as editable buffers |
+| `lua/plugins/git.lua` | gitsigns: change signs, hunks, blame, diffs |
 | `lua/rex/` | Run tasks/commands in a Rex pane, errors back to quickfix (`init` keys, `pane`, `run`, `tasks`) |
 | `lua/statusline.lua` | Hand-written statusline |
 | `lua/tools.lua` | Helpers for ftplugins: install missing mason tools / parsers once |
@@ -57,6 +58,20 @@ Built-in keys still work; this lists what's added or changed.
 | `]]` `[[` | Next / previous class |
 | `<leader>th` | Toggle inlay hints |
 | `<C-y>` / `<C-Space>` / `<Tab>` | Accept completion / open menu / next snippet field |
+
+**Git** (signs on the right of the line numbers: added / changed / deleted)
+
+| Key | Action |
+| --- | --- |
+| `]h` / `[h`, `]H` / `[H` | Next / previous hunk, last / first hunk |
+| `ih` | Hunk text object (`vih`, `dih`, ...) |
+| `<leader>gp` / `gi` | Preview hunk in a popup / inline |
+| `<leader>gd` / `gD` | Diff file against the index / the last commit |
+| `<leader>gq` | All hunks in the repo → quickfix |
+| `<leader>gb` / `gB` | Blame this line (full commit) / whole file |
+| `<leader>tb` | Toggle blame at the end of the current line |
+| `<leader>gs` / `gr` | Stage / reset hunk (or selected lines in visual) |
+| `<leader>gS` / `gR` | Stage / reset the whole file |
 
 **Rex** (only when nvim runs inside Rex)
 

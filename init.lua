@@ -17,6 +17,7 @@ require('plugins.completion')
 require('plugins.format')
 require('plugins.snacks')
 require('plugins.oil')
+require('plugins.git')
 
 -- Run commands in a Rex pane and pull errors back (only inside Rex).
 require('rex')

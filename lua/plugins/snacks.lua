@@ -1,6 +1,7 @@
 -- snacks.nvim is a toolkit of modules, all off unless enabled here.
--- Using: picker (fuzzy search with live preview) and words (highlights other
--- uses of the symbol under the cursor, via LSP).
+-- Using: picker (fuzzy search with live preview), words (highlights other
+-- uses of the symbol under the cursor, via LSP) and statuscolumn (left of the
+-- code: marks + diagnostics | line number | folds + git signs from gitsigns).
 -- LSP results (gd, grr, gri, grt, gO) open in the picker too: see lua/plugins/lsp.lua.
 local gh = require('pack').gh
 
@@ -12,6 +13,7 @@ local snacks = require('snacks')
 snacks.setup({
   picker = { enabled = true },
   words = { enabled = true },
+  statuscolumn = { enabled = true },
 })
 
 local picker = snacks.picker
