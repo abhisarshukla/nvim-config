@@ -2,8 +2,7 @@
 --   <leader>sk  table of every key: yours, plugins', and Vim's built-ins.
 --               Fuzzy search matches the key or its description only.
 --               Preview shows where it's defined; <CR> runs a normal-mode key.
---   <leader>?   ask in plain English ("how do I stage part of a hunk?").
---               Claude answers from the keys this table lists, nothing else.
+-- Plain-English questions (about keys or anything Neovim): lua/ask.lua, <leader>?
 local M = {}
 
 -- Collecting keys -------------------------------------------------------------
@@ -132,87 +131,6 @@ function M.table()
   })
 end
 
--- Asking in plain English -----------------------------------------------------------------
-
-local system_prompt = table.concat({
-  "You answer questions about the user's Neovim key bindings.",
-  'Only suggest keys from the list provided (it is complete for this buffer) plus standard Vim keys and commands.',
-  'If nothing fits, say so and suggest the closest key.',
-  'Reply in at most 6 short lines of Markdown; put keys in backticks; mention the mode when it is not normal mode.',
-}, ' ')
-
-local function float(lines)
-  local buf = vim.api.nvim_create_buf(false, true)
-  vim.bo[buf].filetype = 'markdown'
-  local width = math.min(90, vim.o.columns - 6)
-  local win = vim.api.nvim_open_win(buf, true, {
-    relative = 'editor',
-    width = width,
-    height = 3,
-    row = math.floor(vim.o.lines * 0.2),
-    col = math.floor((vim.o.columns - width) / 2),
-    border = 'rounded',
-    title = ' Keys ',
-    style = 'minimal',
-  })
-  vim.wo[win].wrap, vim.wo[win].linebreak = true, true
-  local function set(text)
-    if not vim.api.nvim_buf_is_valid(buf) then return end
-    vim.api.nvim_buf_set_lines(buf, 0, -1, false, text)
-    local height = 0
-    for _, l in ipairs(text) do
-      height = height + math.max(1, math.ceil(vim.fn.strdisplaywidth(l) / width))
-    end
-    if vim.api.nvim_win_is_valid(win) then vim.api.nvim_win_set_height(win, math.min(height, vim.o.lines - 6)) end
-  end
-  for _, key in ipairs({ 'q', '<Esc>' }) do
-    vim.keymap.set('n', key, function() pcall(vim.api.nvim_win_close, win, true) end, { buffer = buf, nowait = true })
-  end
-  set(lines)
-  return set
-end
-
-function M.ask()
-  local buf = vim.api.nvim_get_current_buf()
-  vim.ui.input({ prompt = 'Ask about keys: ' }, function(question)
-    if not question or question == '' then return end
-    local rows = {}
-    for _, r in ipairs(M.collect(buf)) do
-      table.insert(rows, table.concat({ r.mode, r.keys, r.desc, r.from }, '\t'))
-    end
-    local input = table.concat({
-      'Leader is <Space>. Modes: n normal, x visual, o operator-pending, i insert, c command-line, t terminal.',
-      'Current filetype: ' .. vim.bo[buf].filetype,
-      'Keys (mode, keys, description, defined in):',
-      table.concat(rows, '\n'),
-      '',
-      'Question: ' .. question,
-    }, '\n')
-
-    local set = float({ '**' .. question .. '**', '', '_Asking Claude…_' })
-    vim.system({
-      'claude',
-      '-p',
-      '--model',
-      'haiku',
-      '--tools',
-      '',
-      '--system-prompt',
-      system_prompt,
-      '--no-session-persistence',
-      '--disable-slash-commands',
-      '--strict-mcp-config',
-      '--setting-sources',
-      '',
-    }, { stdin = input, text = true, cwd = vim.fn.stdpath('cache') }, function(res)
-      vim.schedule(function()
-        local answer = res.code == 0 and vim.trim(res.stdout) or ('Claude failed: ' .. vim.trim(res.stderr or ''))
-        set(vim.list_extend({ '**' .. question .. '**', '' }, vim.split(answer, '\n')))
-      end)
-    end)
-  end)
-end
-
 -- Descriptions for matchit's % keys (bundled with Neovim, loaded after init.lua) ------
 
 local matchit = {
@@ -240,6 +158,5 @@ vim.api.nvim_create_autocmd('VimEnter', {
 -- Keys ---------------------------------------------------------------------------------------
 
 vim.keymap.set('n', '<leader>sk', M.table, { desc = 'Search keys (table)' })
-vim.keymap.set('n', '<leader>?', M.ask, { desc = 'Ask about keys in plain English' })
 
 return M

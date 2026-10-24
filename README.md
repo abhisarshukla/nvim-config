@@ -24,7 +24,8 @@ plugin only where Neovim hits a real limit. Leader is `Space`.
 | `lua/plugins/git.lua` | gitsigns: change signs, hunks, blame, diffs |
 | `lua/rex/` | Run tasks/commands in a Rex pane, errors back to quickfix (`init` keys, `pane`, `run`, `tasks`) |
 | `lua/statusline.lua` | Hand-written statusline |
-| `lua/keyhelp.lua` | Key lookup: searchable key table, plain-English questions |
+| `lua/keyhelp.lua` | Key lookup: searchable table of every key |
+| `lua/ask.lua` | Ask Claude about Neovim, your config or keys |
 | `lua/tools.lua` | Helpers for ftplugins: install missing mason tools / parsers once |
 | `ftplugin/<ft>.lua` | Per-language setup: server, parser, tools, formatter (runs when that filetype opens) |
 | `lua/lang/typescript.lua` | Setup shared by the four JS/TS filetypes |
@@ -42,7 +43,7 @@ Built-in keys still work; this lists what's added or changed.
 | Key | Action |
 | --- | --- |
 | `<leader>sk` | Table of every key — yours, plugins', Vim's built-ins. Search by key or description (`blame`, `center`, `split window`); preview shows where it's defined; `<CR>` runs it |
-| `<leader>?` | Ask in plain English ("how do I see who changed this line?"). Claude (`claude -p`, Haiku, no tools) answers from the keys in that table |
+| `<leader>?` | Ask Claude anything about Neovim, your config, plugins or keys, in plain English. It reads Neovim 0.12's help, plugin docs and this config (read-only; Haiku via `claude -p`). In the answer: `a` follow-up, `r` run the suggested command, `q` close |
 | pause after `<leader>`, `g`, `[`, `]`, `z`, `<C-w>` | Popup of what comes next |
 
 **Files and search**
