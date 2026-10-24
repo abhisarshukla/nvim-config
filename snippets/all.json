@@ -1,0 +1,7 @@
+{
+  "todo": {
+    "prefix": "todo",
+    "body": "TODO(${1:who}): $0",
+    "description": "TODO comment with owner"
+  }
+}
