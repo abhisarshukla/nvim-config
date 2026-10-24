@@ -60,7 +60,9 @@ end
 
 function M.render()
   -- Inactive windows: just the file.
-  if vim.g.statusline_winid ~= vim.g.actual_curwin then return file() end
+  -- While %{} is evaluated, the "current" window is the one being drawn;
+  -- g:actual_curwin (a string) is the window that really has focus.
+  if vim.api.nvim_get_current_win() ~= tonumber(vim.g.actual_curwin) then return file() end
   return table.concat({
     mode(),
     branch(),
